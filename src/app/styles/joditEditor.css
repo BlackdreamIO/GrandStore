@@ -1,0 +1,24 @@
+/* src/jodit-custom-theme.css */
+
+:root {
+  --jd-color-background-default: #040404;
+  --jd-color-border: #00ffa0;
+  --jd-color-panel: #181818;
+  --jd-color-icon: #00efff;
+}
+/* Customize the Jodit Editor container */
+.jodit-container {
+  background-color: var(--jd-color-background-default) !important;
+  color: white !important;
+}
+
+/* Customize the Jodit Editor toolbar */
+.jodit-toolbar {
+  background-color: var(--jd-color-panel) !important;
+}
+
+.jodit-toolbar__button {
+  color: var(--jd-color-icon) !important;
+}
+
+/* Add more custom styles as needed */
