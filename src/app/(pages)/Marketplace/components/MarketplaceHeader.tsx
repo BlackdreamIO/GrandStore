@@ -17,7 +17,7 @@ export const MarketplaceHeader = () => {
     const handleCategorySelect = (category : string) => {
         setCurrentCategory(category);
         if(category == "All") {
-            ResetFilter({ ReFetch : false });
+            //ResetFilter({ ReFetch : false });
             return;
         }
         FilterAsset({ filterBy : IFilter.Category, query : category });

@@ -77,7 +77,7 @@ export const AssetContextProvider = ({children} : AssetContextProviderProps) => 
     const ResetFilter = async ({ ReFetch } : { ReFetch : boolean }) => {
         if(ReFetch) {
             const originalAsset = await GetAllAssets();
-            setAssets(originalAsset);
+            //setAssets(originalAsset);
         }
         setAssets(staticAssets);
     }

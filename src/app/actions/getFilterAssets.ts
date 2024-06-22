@@ -2,14 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { Asset } from "@/types/Asset";
-import { craeteSupabaseAppServerClient } from "../utils/supabase";
+import { craeteSupabaseAppServerClient, supabase } from "../utils/supabase";
 import { IFilter } from "@/types/Filter";
 
 export default async function getFilterAssets({ filterBy, query, limit } : { filterBy : IFilter, query : any, limit? : number }) : Promise<Asset[] | null>
 {
     try
     {
-        const supabase = craeteSupabaseAppServerClient();
+        //const supabase = craeteSupabaseAppServerClient();
 
         let request = supabase.from("unityAssets").select("*").limit(limit ?? 100);
 
