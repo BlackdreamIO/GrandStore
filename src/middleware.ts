@@ -6,17 +6,21 @@ export async function middleware (req : NextRequest)
     const res = NextResponse.next();
 
     const user = getCookie("verified", { req : req, res : res });
-    console.log(user);
     
     if (!user) 
     {
         const loginUrl = new URL('/Home', req.url);
         return NextResponse.redirect(loginUrl);
     }
-    
-    return res;
+    if (user && req.nextUrl.pathname.endsWith("Authentication") || req.nextUrl.pathname == config.matcher[1]) {
+        const dashboardUrl = new URL('/Protected/Dashboard', req.url);
+        return NextResponse.redirect(dashboardUrl);
+    }
+    else { 
+        return res;
+    }
 }
 
 export const config = {
-    matcher : ['/Protected/Dashboard']
+    matcher : ['/Protected/Dashboard', "/Protected/Authentication"]
 }

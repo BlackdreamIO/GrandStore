@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAssets } from "@/context/AssetProvider";
 import ErrorBoundary from "@/app/components/ErrorBoundery";
 import { Dropdown } from "@/app/components/Dropdown";
@@ -17,7 +17,7 @@ export const MarketplaceHeader = () => {
     const handleCategorySelect = (category : string) => {
         setCurrentCategory(category);
         if(category == "All") {
-            //ResetFilter({ ReFetch : false });
+            ResetFilter({ ReFetch : false });
             return;
         }
         FilterAsset({ filterBy : IFilter.Category, query : category });
@@ -49,29 +49,14 @@ export const MarketplaceHeader = () => {
     }
 
     const handleSearch =  async () => {
-        if(searchQuery == "") {
-            setAssets(staticAssets);
-            ResetFilter({ ReFetch : false });
-            return;
-        }
         FilterAsset({ filterBy : IFilter.Title, query : searchQuery });
     }
-
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            handleSearch();
-        }, 500); // MS 
-
-        return () => clearTimeout(timeout);
-    }, [searchQuery, handleSearch])
-    
 
     const Category = ({ category, onClick, active } : { category : string, onClick : () => void, active : boolean }) => {
         return (
             <button 
                 onClick={onClick} 
-                className={`${active ? "bg-indigo-500" : "bg-neutral-900 hover:bg-indigo-500"} px-4 py-2 rounded-xl max-sm:text-xs`}
-            >
+                className={`${active ? "bg-indigo-500" : "bg-neutral-900 hover:bg-indigo-500"} px-4 py-2 rounded-xl max-sm:text-xs`}>
                 {category}
             </button>
         )
@@ -85,11 +70,12 @@ export const MarketplaceHeader = () => {
                 <input 
                     type="text" 
                     className="w-7/12 h-12 bg-neutral-900 rounded-xl p-2"
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={(e) => {
-                        if(e.key == 'Enter') {
-                            handleSearch();
-                        }
+                    onChange={(e) => {
+                        const timeout = setTimeout(() => {
+                            setSearchQuery(e.target.value);
+                            FilterAsset({ filterBy : IFilter.Title, query : e.target.value });
+                        }, 500);
+                        return () => clearTimeout(timeout);
                     }}
                 />
                 <button
@@ -112,7 +98,7 @@ export const MarketplaceHeader = () => {
                         key={"All"}
                     />
                     {
-                        staticAssets.map(({ category, id }, i) => {
+                        staticAssets.map(({ category }) => {
                             if (!renderedCategories.has(category)) 
                             {
                                 renderedCategories.add(category);

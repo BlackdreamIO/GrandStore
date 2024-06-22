@@ -1,9 +1,8 @@
 
-
-export default function Dashboard() {
-    return (
-        <div className="min-h-screen h-auto p-4">
-            <h1 className="text-4xl">Dashboard Page</h1>
+export default function DashboardPage() {
+  return (
+        <div className="p-6 no-scrollbar">
+            <h1>Welcome To Dashboard</h1>
         </div>
     )
 }
