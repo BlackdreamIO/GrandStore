@@ -15,8 +15,8 @@ export default function Authentication()
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         const sucess = await logIn({ email : email, password : password });
-        if(sucess) {
-            setCookie("verified", sucess, { maxAge : 30 * 24 * 60 * 60 });
+        if(sucess?.session?.user) {
+            setCookie("verified", sucess.session.user.email, { maxAge : 30 * 24 * 60 * 60 });
             router.push("/Protected/Dashboard");
         }
     };

@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { EditorContent, EditorProvider, useCurrentEditor, useEditor } from '@tiptap/react';
 import { Color } from '@tiptap/extension-color';
 
@@ -30,6 +30,8 @@ interface ButtonProps {
 
 export const TiptapEditor = ({ editable=true, content, onValueChange } : { editable : boolean, content : string, onValueChange? : (html : string) => void }) => {
     
+    const [preMode, setPreMode] = useState(false);
+
     const editor = useEditor({
         extensions: [Document, Bold, Heading, Italic, ListItem, Strike, Paragraph, Text, TextStyle, Color, History, BulletList, OrderdList, Underline],
         content: content,
@@ -38,8 +40,6 @@ export const TiptapEditor = ({ editable=true, content, onValueChange } : { edita
         editable : editable,
         onUpdate(props) {
             onValueChange?.(props.editor.getHTML());
-            console.log(props.editor.getHTML());
-            
         },
 
     })
@@ -52,8 +52,12 @@ export const TiptapEditor = ({ editable=true, content, onValueChange } : { edita
         return (
             <button 
                 className={`bg-neutral-900  hover:bg-neutral-800 px-4 py-2 rounded-lg ${className}`} 
-                onClick={onClick} 
+                onClick={(e) => {
+                    e.preventDefault();
+                    onClick();
+                }} 
                 disabled={disabled}
+                type='button'
             >
                 {children}
           </button>
@@ -62,7 +66,7 @@ export const TiptapEditor = ({ editable=true, content, onValueChange } : { edita
 
     return (
         <div className="tiptap space-y-8">
-            <div className={`${editable ? "flex" : "hidden"} space-x-4`}>
+            <div className={`${editable ? "flex" : "hidden"} gap-4 flex-wrap`}>
                 <Button
                     onClick={() => editor.chain().toggleBold().run()}
                     disabled={!editor.can().chain().focus().toggleBold().run()}
@@ -142,8 +146,18 @@ export const TiptapEditor = ({ editable=true, content, onValueChange } : { edita
                 >
                     Redo
                 </Button>
+                <Button onClick={() => setPreMode(!preMode)} className={preMode ? 'border-2 border-indigo-500' : 'border-2 border-neutral-800'}>
+                    Custom Pre
+                </Button>
             </div>
-            <EditorContent editor={editor} />
+            {
+                preMode && (
+                    <div>
+                        
+                    </div>
+                )
+            }
+            <EditorContent editor={editor} disabled={preMode} className={editable ? "bg-neutral-900 h-96" : ""} />
         </div>
     )
 }

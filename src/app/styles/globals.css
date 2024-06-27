@@ -47,5 +47,10 @@ body {
   }
 }
 
-
+.ProseMirror {
+  height: 100%; /* Ensures the ProseMirror content area takes the full height of the container */
+  box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+  overflow-y: auto; /* Allows scrolling if content overflows */
+  padding: 1%;
+}
 

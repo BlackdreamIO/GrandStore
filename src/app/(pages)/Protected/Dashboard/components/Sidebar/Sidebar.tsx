@@ -82,7 +82,7 @@ export const Sidebar = () => {
     }
 
     return (
-        <div className="w-[300px] max-md:w-[200px] bg-neutral-950 h-screen overflow-y-scroll custom-scrollbar p-4 space-y-16 pt-5 max-md:absolute max-md:z-40">
+        <div className="w-[300px] max-md:w-[200px] bg-neutral-950 h-[90vh] overflow-y-scroll custom-scrollbar p-4 space-y-16 pt-5 max-md:absolute max-md:z-40">
             {Group.map(group => (
                 <div key={group.title} className="w-full space-y-4">
                     <h1 className="text-2xl max-lg:text-base">{group.title}</h1>

@@ -1,23 +1,35 @@
 "use server"
 
 import { supabase } from "@/app/utils/supabase";
+import { Session, User } from "@supabase/supabase-js";
 
-export default async function logIn({ email, password } : { email : string, password : string }) : Promise<boolean>
+interface LogInResponse {
+    user : User | null;
+    session : Session | null;
+}
+
+export default async function logIn({ email, password } : { email : string, password : string }) : Promise<LogInResponse>
 {
     try
     {
-        const { error } = await supabase.auth.signInWithPassword({ email,password });
+        const { data : { user, session }, error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
         
         if (error) {
             console.error('Error logging in:', error.message);
-            return false;
+            throw new Error(error?.message);
         }
         else
         {
-            return true;
+            return {
+                user : user,
+                session : session
+            };
         }
     }
-    catch (error) {
-        return false;
+    catch (error : any) {
+        throw new Error(error?.message);
     }
 }

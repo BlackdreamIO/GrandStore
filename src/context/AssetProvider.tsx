@@ -2,13 +2,14 @@
 
 import { createContext, useContext, useState, Dispatch, SetStateAction, ReactNode, useEffect } from 'react';
 
-import { Asset } from '@/types/Asset';
+import { Asset, AssetUpload } from '@/types/Asset';
 import { IFilter } from '@/types/Filter';
 
 import getAssets from '@/app/actions/getAssets';
 import getSingleAsset from '@/app/actions/getSingleAsset';
 import getFilterAssets from '@/app/actions/getFilterAssets';
 import getPaginationAssets from '@/app/actions/getPaginationAssets';
+import createAsset from '@/app/actions/assets/CreateAsset/createAsset';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,7 +31,7 @@ export interface AssetContextType{
     ResetFilter : ({ ReFetch } : { ReFetch : boolean }) => void;
 
     LoadMore: () => void;
-    CreateAsset: (data : Asset) => Promise<void>;
+    CreateAsset: ({ assetData } : {assetData : AssetUpload}) => Promise<void>;
     UpdateAsset: (data : Asset) => Promise<void>;
     DeleteAsset: (id: string) => Promise<any>;
 }
@@ -86,8 +87,44 @@ export const AssetContextProvider = ({children} : AssetContextProviderProps) => 
         setLoading(false);
     }
 
-    const CreateAsset = async () => {
+    const CreateAsset = async ({ assetData } : {assetData : AssetUpload}) => {
+
+        if(assetData.title && assetData.thumbnail && assetData.category && assetData.platform && assetData.downloadLink) {
+            if(assetData.originalLink && assetData.originalPrice && assetData.fileType && assetData.description) {
+                const AssetFormData : FormData = new FormData();
         
+                // FOLDER FILE 
+                AssetFormData.append("thumbnail", assetData.thumbnail);
+                AssetFormData.append("fileName", "thumbnail");
+                AssetFormData.append("folder", assetData.title);
+        
+                // ASSET INFO
+                AssetFormData.append("title", assetData.title);
+                AssetFormData.append("category", assetData.category);
+                AssetFormData.append("originalLink", assetData.originalLink);
+                AssetFormData.append("downloadLink", assetData.downloadLink);
+                AssetFormData.append("description", assetData.description);
+                AssetFormData.append("created_at", new Date().toDateString());
+        
+                // NON CONTROLLABLE FIELD
+                AssetFormData.append("downloads", String(0)); // initial non controllable feild
+                AssetFormData.append("platform", 'Unity'); // initial non controllable feild
+                AssetFormData.append("fileType", '.unityPackage'); // initial non controllable feild
+                
+                assetData.showcaseImages.forEach((img) => AssetFormData.append("showcaseImages[]", img));
+        
+                setLoading(true);
+                const res = await createAsset(AssetFormData);
+                setLoading(false);
+                console.log(res);
+            }
+            else {
+                alert("Feild Value Missing");
+            }
+        }
+        else {
+            alert("Feild Value Missing");
+        }
     }
 
     const UpdateAsset = async () => {

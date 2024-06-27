@@ -1,6 +1,6 @@
 
 export interface Asset {
-    id : string;
+    id? : string;
     title : string;
     thumbnail : string;
     category : string;
@@ -11,5 +11,20 @@ export interface Asset {
     downloadLink : string;
     platform : string;
     fileType : string;
+    created_at : Date;
+}
+
+export interface AssetUpload {
+    title : string;
+    thumbnail : File | Blob | string;
+    category : string;
+    downloads : number;
+    showcaseImages : File[] | Blob[] | string[];
+    description : string;
+    originalLink : string;
+    downloadLink : string;
+    platform : string;
+    fileType : string;
+    originalPrice : string;
     created_at : Date;
 }
